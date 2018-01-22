@@ -79,9 +79,9 @@ public class ContainerUtil {
                 new LinkedList<Map.Entry<K, V>>(map.entrySet());
         list.sort((o1, o2) -> {
             if (desc) {
-                return (o2.getValue()).compareTo(o1.getValue());
-            } else {
                 return (o1.getValue()).compareTo(o2.getValue());
+            } else {
+                return (o2.getValue()).compareTo(o1.getValue());
             }
         });
 

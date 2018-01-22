@@ -51,6 +51,6 @@ public class Pair<K, V> implements Serializable, Comparable<V>{
 
     @Override
     public String toString() {
-        return v.toString();
+        return k.toString() + ":" + v.toString();
     }
 }
