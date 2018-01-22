@@ -62,6 +62,23 @@ public class Main {
         System.out.println(sub);
 
 
+
+        sub = on("com.jarlene.java.Main$ItemStruct")
+                .create()
+                .set("feedId", 13223L)
+                .set("cateId", 11342L)
+                .set("itemId", 2213334L)
+                .set("time", "2018-11-22")
+                .set("score", 0.732)
+                .call("toString")
+                .get();
+
+        System.out.println(sub);
+
+//        String[] mainArgs = new String[] {};
+//        on("com.jarlene.java.Main")
+//                .call("main", (Object) mainArgs); // 死循环
+
         // ContainerUtil demo
         Pair<String, Double> pair = Pair.make("ss", 3.14);
         System.out.println(pair.toString());
@@ -72,10 +89,10 @@ public class Main {
         list.add(ItemStruct.make(1232L, 342L, 23134L, "2018-01-22", 0.632));
 
         ContainerUtil.sortList(list, "feedId", true);
-//        System.out.println(list);
+        System.out.println(list);
 
         Map<Long, List<ItemStruct>> map = ContainerUtil.listToMap(list, "itemId");
-//        System.out.println(map);
+        System.out.println(map);
 
         System.out.println(ContainerUtil.sortByKey(map, true));
 
