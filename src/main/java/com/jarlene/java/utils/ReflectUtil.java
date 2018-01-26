@@ -3,11 +3,14 @@ package com.jarlene.java.utils;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.*;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ReflectUtil {
 
+
+    private final static Map<String, Class<?>> classCache;
 
     private final Class<?> type;
 
@@ -16,6 +19,7 @@ public class ReflectUtil {
     private static final Constructor<MethodHandles.Lookup> CACHED_LOOKUP_CONSTRUCTOR;
 
     static {
+        classCache = new HashMap<>();
         try {
             CACHED_LOOKUP_CONSTRUCTOR = MethodHandles.Lookup.class.getDeclaredConstructor(Class.class);
 
@@ -49,6 +53,13 @@ public class ReflectUtil {
 
     public static ReflectUtil on(String name) throws RuntimeException {
         return on(forName(name));
+    }
+
+    public static ReflectUtil cache(String name) throws RuntimeException {
+        if (classCache.containsKey(name)) {
+            return new ReflectUtil(classCache.get(name));
+        }
+        return on(name);
     }
 
     public static ReflectUtil on(String name, ClassLoader classLoader) throws RuntimeException {
@@ -253,6 +264,7 @@ public class ReflectUtil {
     private ReflectUtil(Class<?> type, Object object) {
         this.type = type;
         this.object = object;
+        classCache.put(type.getName(), type);
     }
 
     private static ReflectUtil on(Class<?> type, Object object) {
