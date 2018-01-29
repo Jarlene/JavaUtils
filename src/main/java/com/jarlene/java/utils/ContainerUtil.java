@@ -11,7 +11,7 @@ public class ContainerUtil {
      * @param list list数据
      * @param sortField T 数据结构中的字段
      * @param desc 是否降序
-     * @param <T>
+     * @param <T> 数据类型
      */
     public static <T>  void sortList(List<T> list, String sortField, final boolean desc) {
         if (list == null || list.isEmpty()) {
@@ -140,5 +140,51 @@ public class ContainerUtil {
             return;
         }
         Collections.shuffle(list);
+    }
+
+
+    /**
+     * 按照数据的字段进行过滤
+     * @param data 原始数据
+     * @param filters 过滤字段以及值
+     * @param <T> 数据类型
+     * @return
+     */
+    public static <T> List<T> filter(List<T> data, Map<String, Object> filters) {
+        if (data == null || data.isEmpty() || filters == null || filters.isEmpty()) {
+            return data;
+        }
+        Map<Field, Object> fields = new HashMap<>();
+        for (String fieldName : filters.keySet()) {
+            try {
+                Field field = data.get(0).getClass().getField(fieldName);
+                field.setAccessible(true);
+                fields.put(field, filters.get(fieldName));
+            } catch (NoSuchFieldException e) {
+                continue;
+            }
+        }
+
+        List<T> result = new ArrayList<>();
+
+        for (T item : data) {
+            boolean add = true;
+            for (Field field : fields.keySet()) {
+                try {
+                    if (!field.get(item).toString().equalsIgnoreCase(fields.get(field).toString())) {
+                        add = false;
+                    }
+                    if (!add) {
+                        break;
+                    }
+                } catch (IllegalAccessException e) {
+                    continue;
+                }
+            }
+            if (add) {
+                result.add(item);
+            }
+        }
+        return result;
     }
 }
